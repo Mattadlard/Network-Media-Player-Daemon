@@ -1,0 +1,1 @@
+docker run -d -p 5000:5000 --env SPOTIPY_CLIENT_ID=your_spotify_client_id --env SPOTIPY_CLIENT_SECRET=your_spotify_client_secret music-daemon
