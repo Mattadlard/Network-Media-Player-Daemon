@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Music Controller</title>
+</head>
+<body>
+    <h1>Music Controller</h1>
+    <form action="{{ url_for('play') }}" method="post">
+        <label for="device_name">Device:</label>
+        <select id="device_name" name="device_name">
+            {% for device in devices %}
+                <option value="{{ device }}">{{ device }}</option>
+            {% endfor %}
+        </select>
+        <label for="file_path">Music File Path:</label>
+        <input type="text" id="file_path" name="file_path">
+        <label for="track_uri">Spotify Track URI:</label>
+        <input type="text" id="track_uri" name="track_uri">
+        <button type="submit">Play</button>
+    </form>
+    <form action="{{ url_for('stop') }}" method="post">
+        <label for="device_name">Device:</label>
+        <select id="device_name" name="device_name">
+            {% for device in devices %}
+                <option value="{{ device }}">{{ device }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Stop</button>
+    </form>
+</body>
+</html>
