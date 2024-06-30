@@ -1,0 +1,4 @@
+Flask==2.0.1
+pychromecast==9.2.0
+spotipy==2.19.0
+soco==0.23
