@@ -1,0 +1,31 @@
+Setup Guide**
+
+**Clone the Repository**: Start by cloning this repository to your local machine.
+
+git clone https://github.com/yourusername/music-daemon.git cd music-daemon**Create Environment Variables**: Create a `.env` file in the root directory and add your Spotify credentials.SPOTIPY_CLIENT_ID=your_spotify_client_id SPOTIPY_CLIENT_SECRET=your_spotify_client_secret SPOTIPY_REDIRECT_URI=http://localhost:5000/callback**Build the Docker Image**: Use the following command to build the Docker image.docker build -t music-daemon .**Run the Docker Container**: Start the container with the environment variables for Spotify.docker run -d -p 5000:5000 --env-file .env music-daemon**Usage**
+
+Once your Docker container is up and running, follow these steps to control your music playback:
+
+**Open the Web Interface**: Navigate to `http://localhost:5000` in your web browser.
+
+**Select a Device**: Choose your playback device from the dropdown menu. This can be a Chromecast, Sonos, AirPlay, LinkPlay device, or any other supported device.
+
+**Enter File Path or Spotify URI**:
+
+- **Local File**: Provide the path to the local music file you want to play.
+
+- **Spotify**: Enter the Spotify track URI.
+
+**Play Music**: Click the "Play" button to start playing music on your selected device.
+
+**Stop Music**: To stop playback, select the device and click the "Stop" button.
+
+**Additional Configuration**
+
+**VB-CABLE Setup**
+
+To use VB-CABLE, ensure it is installed and configured on your system. Follow these steps:
+
+**Install VB-CABLE**: Download and install VB-CABLE from the official website.
+
+**Configure Audio Settings**: Set your audio source (e.g., music player) to output to 'VB-CABLE Input' and your audio sink (e.g., speakers) to receive from 'VB-CABLE Output'.
