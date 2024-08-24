@@ -11,13 +11,13 @@ Welcome to the Music Daemon project! This is an idea for mainly a handy little d
 - 
 - **Device Support**: Play music on Chromecast, Sonos devices, or through VB-CABLE.
 - 
-- **Simple Web Interface**: Control playback with a user-friendly web interface.
+- **Simple Web Interface**: Control playback with a user-friendly web interface. its basic. 
 
 ## Prerequisites
 
 Before you begin, make sure you have the following:
 
-- Docker installed on your system.
+- Docker installed on your system. obviously.
 - A Spotify Developer account to get your client ID and client secret.
 - Chromecast or Sonos devices on your network.
 - VB-CABLE installed and configured on your system if you want to use it.
