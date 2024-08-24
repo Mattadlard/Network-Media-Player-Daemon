@@ -1,4 +1,4 @@
-# Network-Media-Player-Daemon
+ñ# Network-Media-Player-Daemon
 Network Media Player Daemon
 
 # Music Daemon
@@ -36,8 +36,7 @@ Before you begin, make sure you have the following:
 2. **Create Environment Variables**: Create a `.env` file in the root directory and add your Spotify credentials.
 
     ```
-    SPOTIPY_CLIENT_ID=your_spotify_client_id
-    SPOTIPY_CLIENT_SECRET=your_spotify_client_secret
+    SPOTIPY_CLIENT_ID=your_spotify_client_id SPOTIPY_CLIENT_SECRET=your_spotify_client_secret SPOTIPY_REDIRECT_URI=http://localhost:5000/callback
     ```
 
 3. **Build the Docker Image**: Use the following command to build the Docker image.
