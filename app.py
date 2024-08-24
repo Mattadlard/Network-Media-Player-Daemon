@@ -1,11 +1,14 @@
 import os
-import time
 import pychromecast
 import soco
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 from flask import Flask, request, render_template, redirect, url_for
+import asyncio
+from devices import DeviceManager
+from playback import PlaybackManager
 
+# Flask app setup
 app = Flask(__name__)
 
 # Spotify setup
@@ -14,84 +17,50 @@ SPOTIPY_CLIENT_SECRET = os.getenv('SPOTIPY_CLIENT_SECRET')
 SPOTIPY_REDIRECT_URI = 'http://localhost:5000/callback'
 
 # Initialize Spotify client
-spotify = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=SPOTIPY_CLIENT_ID,
-                                                    client_secret=SPOTIPY_CLIENT_SECRET,
-                                                    redirect_uri=SPOTIPY_REDIRECT_URI,
-                                                    scope='user-library-read,user-read-playback-state,user-modify-playback-state'))
+spotify = spotipy.Spotify(auth_manager=SpotifyOAuth(
+    client_id=SPOTIPY_CLIENT_ID,
+    client_secret=SPOTIPY_CLIENT_SECRET,
+    redirect_uri=SPOTIPY_REDIRECT_URI,
+    scope='user-library-read,user-read-playback-state,user-modify-playback-state'
+))
 
-def discover_devices():
-    chromecasts, _ = pychromecast.get_chromecasts()
-    sonos_devices = soco.discover()
-    devices = [cc.device.friendly_name for cc in chromecasts]
-    if sonos_devices:
-        devices.extend([device.player_name for device in sonos_devices])
-    return devices
+# Device and Playback Manager Instances
+device_manager = DeviceManager()
+playback_manager = PlaybackManager()
 
-def play_music(device_name, track_uri=None, file_path=None):
-    if file_path:
-        if 'chromecast' in device_name.lower():
-            play_music_chromecast(device_name, file_path)
-        else:
-            play_music_sonos(device_name, file_path)
-    elif track_uri:
-        play_music_spotify(device_name, track_uri)
-
-def play_music_chromecast(device_name, file_path):
-    chromecasts, _ = pychromecast.get_chromecasts()
-    cast = next(cc for cc in chromecasts if cc.device.friendly_name == device_name)
-    cast.wait()
-    mc = cast.media_controller
-    mc.play_media(file_path, "audio/mp3")
-    mc.block_until_active()
-    while mc.status.player_state == "PLAYING":
-        time.sleep(1)
-    mc.stop()
-    cast.disconnect()
-
-def play_music_sonos(device_name, file_path):
-    sonos_devices = soco.discover()
-    if sonos_devices:
-        device = next(dev for dev in sonos_devices if dev.player_name == device_name)
-        device.play_uri(file_path)
-
-def play_music_spotify(device_name, track_uri):
-    if 'chromecast' in device_name.lower():
-        # Implement Spotify playback on Chromecast
-        pass
-    else:
-        # Implement Spotify playback on other devices
-        pass
+# Discover devices at the start
+device_manager.discover_devices()
 
 @app.route('/')
 def index():
-    devices = discover_devices()
-    return render_template('index.html', devices=devices)
+    devices = device_manager.get_all_devices()
+    return render_template('index.html', devices=[d['name'] for d in devices])
 
 @app.route('/play', methods=['POST'])
 def play():
     device_name = request.form['device_name']
     file_path = request.form['file_path']
     track_uri = request.form['track_uri']
-    play_music(device_name, track_uri, file_path)
-    return redirect(url_for('index'))
+
+    device_info = next((d for d in device_manager.get_all_devices() if d['name'] == device_name), None)
+    if device_info:
+        playback_manager.play_on_device(device_info, file_path, track_uri)
+        return jsonify({'status': 'success'})
+    else:
+        return jsonify({'status': 'device not found'}), 404
 
 @app.route('/stop', methods=['POST'])
 def stop():
     device_name = request.form['device_name']
-    if 'chromecast' in device_name.lower():
-        stop_music_chromecast(device_name)
+    device_info = next((d for d in device_manager.get_all_devices() if d['name'] == device_name), None)
+    if device_info:
+        playback_manager.stop_device(device_info)
+        return jsonify({'status': 'success'})
     else:
-        stop_music_sonos(device_name)
-    return redirect(url_for('index'))
-
-# Placeholder for functions to be implemented
-def get_music_metadata():
-    pass
-
-def get_album_images():
-    pass
+        return jsonify({'status': 'device not found'}), 404
 
 def configure_vb_cable():
+    # Placeholder function for configuring VB Cable (if applicable)
     pass
 
 configure_vb_cable()
