@@ -1,0 +1,39 @@
+from flask import Flask, render_template, request, jsonify
+from devices import DeviceManager
+from playback import PlaybackManager
+
+app = Flask(__name__)
+device_manager = DeviceManager()
+playback_manager = PlaybackManager()
+
+@app.route('/')
+def index():
+    device_manager.discover_devices()
+    devices = device_manager.get_all_devices()
+    return render_template('index.html', devices=[d['name'] for d in devices])
+
+@app.route('/play', methods=['POST'])
+def play():
+    device_name = request.form['device_name']
+    file_path = request.form['file_path']
+    track_uri = request.form['track_uri']
+
+    device_info = next((d for d in device_manager.get_all_devices() if d['name'] == device_name), None)
+    if device_info:
+        playback_manager.play_on_device(device_info, file_path, track_uri)
+        return jsonify({'status': 'success'})
+    else:
+        return jsonify({'status': 'device not found'}), 404
+
+@app.route('/stop', methods=['POST'])
+def stop():
+    device_name = request.form['device_name']
+    device_info = next((d for d in device_manager.get_all_devices() if d['name'] == device_name), None)
+    if device_info:
+        playback_manager.stop_device(device_info)
+        return jsonify({'status': 'success'})
+    else:
+        return jsonify({'status': 'device not found'}), 404
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
