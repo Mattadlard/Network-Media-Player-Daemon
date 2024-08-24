@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Controller</title>
+</head>
+<body>
+    <h1>Music Controller</h1>
+
+    <form id="playback-form">
+        <label for="device_name">Select Device:</label>
+        <select id="device_name" name="device_name">
+            {% for device in devices %}
+                <option value="{{ device }}">{{ device }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="file_path">Local File Path:</label>
+        <input type="text" id="file_path" name="file_path">
+
+        <label for="track_uri">Spotify Track URI:</label>
+        <input type="text" id="track_uri" name="track_uri">
+
+        <button type="submit">Play</button>
+        <button type="button" id="stop-button">Stop</button>
+    </form>
+
+    <script>
+        document.getElementById('playback-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            let formData = new FormData(event.target);
+
+            fetch('/play', {
+                method: 'POST',
+                body: formData
+            }).then(response => response.json()).then(data => {
+                if (data.status === 'success') {
+                    alert('Playing music!');
+                } else {
+                    alert('Failed to play music: ' + data.status);
+                }
+            });
+        });
+
+        document.getElementById('stop-button').addEventListener('click', function() {
+            let formData = new FormData(document.getElementById('playback-form'));
+
+            fetch('/stop', {
+                method: 'POST',
+                body: formData
+            }).then(response => response.json()).then(data => {
+                if (data.status === 'success') {
+                    alert('Stopped playing music!');
+                } else {
+                    alert('Failed to stop music: ' + data.status);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
