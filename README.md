@@ -56,29 +56,29 @@ Before you begin, make sure you have the following:
 
 Once your Docker container is up and running, follow these steps to control your music playback:
 
-1. **Open the Web Interface**: Navigate to `http://localhost:5000` in your web browser.
+**Open the Web Interface**: Navigate to `http://localhost:5000` in your web browser.
 
-2. **Select a Device**: Choose your playback device from the dropdown menu. This can be a Chromecast, a Sonos device, or any other supported device.
+**Select a Device**: Choose your playback device from the dropdown menu. This can be a Chromecast, Sonos, AirPlay, LinkPlay device, or any other supported device.
 
-3. **Enter File Path or Spotify URI**:
-    - **Local File**: Provide the path to the local music file you want to play.
-    - **Spotify**: Enter the Spotify track URI.
+**Enter File Path or Spotify URI**:
 
-4. **Play Music**: Click the "Play" button to start playing music on your selected device.
+- **Local File**: Provide the path to the local music file you want to play.
 
-5. **Stop Music**: To stop playback, select the device and click the "Stop" button obviously.
+- **Spotify**: Enter the Spotify track URI.
 
-## Additional Configuration
+**Play Music**: Click the "Play" button to start playing music on your selected device.
 
-### VB-CABLE Setup
+**Stop Music**: To stop playback, select the device and click the "Stop" button.
 
-To use VB-CABLE, ensure it is installed and configured on your system. 
+**Additional Configuration**
 
-i guess follow these steps:
+**VB-CABLE Setup**
 
-1. **Install VB-CABLE**: Download and install VB-CABLE from the [official website](https://www.vb-audio.com/Cable/).
+To use VB-CABLE, ensure it is installed and configured on your system. Follow these steps:
 
-2. **Configure Audio Settings**: Set your audio source (e.g., music player) to output to 'VB-CABLE Input' and your audio sink (e.g., speakers) to receive from 'VB-CABLE Output'.
+**Install VB-CABLE**: Download and install VB-CABLE from the official website.
+
+**Configure Audio Settings**: Set your audio source (e.g., music player) to output to 'VB-CABLE Input' and your audio sink (e.g., speakers) to receive from 'VB-CABLE Output'.
 
 ### Extending Device Support
 
