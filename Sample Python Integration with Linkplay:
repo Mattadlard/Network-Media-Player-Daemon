@@ -1,0 +1,39 @@
+import requests
+
+class LinkPlayDevice:
+    def __init__(self, ip_address):
+        self.ip_address = ip_address
+        self.base_url = f"http://{ip_address}:80"
+
+    def play_url(self, url):
+        play_endpoint = f"{self.base_url}/httpapi.asp"
+        params = {
+            'command': 'setPlayerCmd:play',
+            'media': url,
+            'type': 'url'
+        }
+        response = requests.get(play_endpoint, params=params)
+        return response.ok
+
+    def stop(self):
+        stop_endpoint = f"{self.base_url}/httpapi.asp"
+        params = {
+            'command': 'setPlayerCmd:stop'
+        }
+        response = requests.get(stop_endpoint, params=params)
+        return response.ok
+
+    def get_name(self):
+        info_endpoint = f"{self.base_url}/httpapi.asp"
+        params = {
+            'command': 'getStatus'
+        }
+        response = requests.get(info_endpoint, params=params)
+        if response.ok:
+            data = response.json()
+            return data.get('DeviceName', 'Unknown Device')
+        return 'Unknown Device'
+
+# Usage
+device = LinkPlayDevice('192.168.1.101')
+device.play_url('http://example.com/some_audio_file.mp3')
