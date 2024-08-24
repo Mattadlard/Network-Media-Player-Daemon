@@ -1,4 +1,6 @@
 Flask==2.0.1
 pychromecast==9.2.0
+soco==0.21
 spotipy==2.19.0
-soco==0.23
+pyatv==0.8.3
+linkplay==0.1.7  # Hypothetical package name for Linkplay devices etc
